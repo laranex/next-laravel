@@ -1,0 +1,29 @@
+<?php
+
+namespace {{namespace}};
+
+use Laranex\NextLaravel\Cores\Operation;
+
+class {{operation}} extends Operation
+{
+
+     /**
+     * Create a new operation instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        //
+    }
+
+     /**
+     * Execute the operation.
+     *
+     * @return void
+     */
+    public function handle(): void
+    {
+        //
+    }
+}

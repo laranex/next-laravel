@@ -1,0 +1,29 @@
+<?php
+
+namespace {{namespace}};
+
+use Laranex\NextLaravel\Cores\QueueableJob;
+use Illuminate\Contracts\Queue\ShouldQueue;
+
+class {{job}} extends QueueableJob
+{
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct(): void
+    {
+        //
+    }
+
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle(): void
+    {
+        //
+    }
+}

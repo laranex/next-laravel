@@ -1,0 +1,19 @@
+<?php
+
+/*
+|--------------------------------------------------------------------------
+| Routes
+|--------------------------------------------------------------------------
+|
+| Register your module routes here. These routes are loaded by the
+| NextLaravelServiceProvider.php. Now go build something awesome!
+|
+*/
+
+Route::group(['prefix' => '{{versionOrDirectory}}/{{route}}'], function() {
+
+    Route::get('/', function() {
+        return view('next-laravel::welcome');
+    });
+
+});
