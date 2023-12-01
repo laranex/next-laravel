@@ -13,7 +13,7 @@ class RequestMakeCommand extends BaseCommand
      */
     public $signature = 'next:request
                         {request : Request}
-                        {domain : Domain}
+                        {module : Module}
                         {--F|force : Overwrite existing files}';
 
     /**
@@ -21,7 +21,7 @@ class RequestMakeCommand extends BaseCommand
      *
      * @var string
      */
-    public $description = 'Create a new request in a domain';
+    public $description = 'Create a new request in a module';
 
     /**
      * Execute the console command.
@@ -30,10 +30,10 @@ class RequestMakeCommand extends BaseCommand
     {
         try {
             $request = $this->argument('request');
-            $domain = $this->argument('domain');
+            $module = $this->argument('module');
             $force = $this->option('force');
 
-            $output = (new RequestGenerator())->generate($request, $domain, $force);
+            $output = (new RequestGenerator())->generate($request, $module, $force);
 
             $this->printFileGeneratedOutput($output);
         } catch (\Exception $exception) {
