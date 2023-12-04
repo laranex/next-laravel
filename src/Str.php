@@ -93,18 +93,6 @@ class Str extends LaravelStr
     }
 
     /**
-     * Get the given name formatted as a domain.
-     *
-     * Domain names are just CamelCase
-     *
-     * @param  string  $name
-     */
-    public static function domain($name): string
-    {
-        return self::studly($name);
-    }
-
-    /**
      * Get the given name formatted as a service name.
      */
     public static function module(string $name): string

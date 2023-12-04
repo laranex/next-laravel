@@ -14,12 +14,12 @@ class JobGenerator extends Generator
      *
      * @throws Exception
      */
-    public function generate(string $job, string $domain, bool $queueable = false, bool $force = false): string
+    public function generate(string $job, string $module, bool $queueable = false, bool $force = false): string
     {
         $job = Str::job($job);
-        $domain = Str::domain($domain);
+        $module = Str::module($module);
 
-        $directoryPath = app_path("Domains/{$domain}/Jobs");
+        $directoryPath = app_path("Modules/{$module}/Jobs");
         $filename = "{$job}.php";
         $filePath = "{$directoryPath}/{$filename}";
 
@@ -28,7 +28,7 @@ class JobGenerator extends Generator
         $stubContents = $this->getStubContents($queueable);
 
         $stubContents = $this->replacePlaceholders($stubContents, [
-            'namespace' => "App\\Domains\\{$domain}\\Jobs",
+            'namespace' => "App\\Modules\\{$module}\\Jobs",
             'job' => $job,
         ]);
 
