@@ -14,12 +14,12 @@ class RequestGenerator extends Generator
      *
      * @throws Exception
      */
-    public function generate(string $request, string $domain, bool $force = false): string
+    public function generate(string $request, string $module, bool $force = false): string
     {
         $request = Str::request($request);
-        $domain = Str::domain($domain);
+        $module = Str::module($module);
 
-        $directoryPath = app_path("Domains/{$domain}/Requests");
+        $directoryPath = app_path("Modules/{$module}/Http/Requests");
         $filename = "{$request}.php";
         $filePath = "{$directoryPath}/{$filename}";
 
@@ -28,7 +28,7 @@ class RequestGenerator extends Generator
         $stubContents = $this->getStubContents();
 
         $stubContents = $this->replacePlaceholders($stubContents, [
-            'namespace' => "App\\Domains\\{$domain}\\Requests",
+            'namespace' => "App\\Modules\\{$module}\\Http\\Requests",
             'request' => $request,
         ]);
 

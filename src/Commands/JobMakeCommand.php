@@ -13,7 +13,7 @@ class JobMakeCommand extends BaseCommand
      */
     public $signature = 'next:job
                         {job : Job}
-                        {domain : Domain}
+                        {module : Module}
                         {--Q|queue : Make the job queueable}
                         {--F|force : Overwrite existing files}';
 
@@ -22,7 +22,7 @@ class JobMakeCommand extends BaseCommand
      *
      * @var string
      */
-    public $description = 'Create a new job in a domain';
+    public $description = 'Create a new job in a module';
 
     /**
      * Execute the console command.
@@ -31,11 +31,11 @@ class JobMakeCommand extends BaseCommand
     {
         try {
             $job = $this->argument('job');
-            $domain = $this->argument('domain');
+            $module = $this->argument('module');
             $queueable = $this->option('queue');
             $force = $this->option('force');
 
-            $output = (new JobGenerator())->generate($job, $domain, $queueable, $force);
+            $output = (new JobGenerator())->generate($job, $module, $queueable, $force);
 
             $this->printFileGeneratedOutput($output);
         } catch (\Exception $exception) {
