@@ -1,7 +1,7 @@
 <p align="center"><a href="https://next-laravel.netlify.app" target="_blank"><img src="images/logo.svg" width="400"></a></p>
 
 
-A package which allows you to build a next Laravel Application
+A package which allows you to build a next level Laravel Application
 
 
 > **Documentation** - [https://next-laravel.netlify.app](https://next-laravel.netlify.app)
