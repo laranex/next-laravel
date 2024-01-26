@@ -43,7 +43,7 @@ trait UnitDispatcher
              */
             if ($dispatchableUnit instanceof Operation) {
                 $packageName = json_decode(file_get_contents(dirname(__DIR__, 2).'/composer.json', true))?->name;
-                throw new Error('['.$dispatchableUnit::class."is an Operation and is not allowed to be queue yet, $packageName will be providing it soon ]");
+                throw new Error('['.$dispatchableUnit::class."is an Operation and is not allowed to be queued yet, $packageName will be providing it soon ]");
             }
 
             throw new Error('['.$dispatchableUnit::class.' does not support queues. Please extends to ['.QueueableJob::class.']');
