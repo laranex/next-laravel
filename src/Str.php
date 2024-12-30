@@ -48,7 +48,7 @@ class Str extends LaravelStr
     /**
      * Get the given name formatted as a feature.
      *
-     *    i.e. "Create Post Feature", "CreatePostFeature.php", "createPost", "createe"
+     *    i.e. "Create Post Feature", "CreatePostFeature.php", "createPost", "create"
      *    and many other forms will be transformed to "CreatePostFeature" which is
      *    the standard feature class name.
      */
