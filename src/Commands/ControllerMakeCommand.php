@@ -33,7 +33,7 @@ class ControllerMakeCommand extends BaseCommand
             $module = $this->argument('module');
             $force = $this->option('force');
 
-            $output = (new ControllerGenerator())->generate($feature, $module, $force);
+            $output = (new ControllerGenerator)->generate($feature, $module, $force);
 
             $this->printFileGeneratedOutput($output);
         } catch (\Exception $exception) {

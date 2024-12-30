@@ -33,7 +33,7 @@ class FeatureMakeCommand extends BaseCommand
             $module = $this->argument('module');
             $force = $this->option('force');
 
-            $output = (new FeatureGenerator())->generate($feature, $module, $force);
+            $output = (new FeatureGenerator)->generate($feature, $module, $force);
 
             $this->printFileGeneratedOutput($output);
         } catch (\Exception $exception) {
