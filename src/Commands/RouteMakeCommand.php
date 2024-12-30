@@ -35,7 +35,7 @@ class RouteMakeCommand extends BaseCommand
             $routeFileType = $this->option('api') ? 'api' : 'web';
             $force = $this->option('force');
 
-            $output = (new RouteGenerator())->generate($route, $versionOrDirectory, $routeFileType, $force);
+            $output = (new RouteGenerator)->generate($route, $versionOrDirectory, $routeFileType, $force);
 
             $this->printFileGeneratedOutput($output);
         } catch (\Exception $exception) {

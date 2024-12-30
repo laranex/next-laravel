@@ -33,7 +33,7 @@ class OperationMakeCommand extends BaseCommand
             $domain = $this->argument('domain');
             $force = $this->option('force');
 
-            $output = (new OperationGenerator())->generate($operation, $domain, $force);
+            $output = (new OperationGenerator)->generate($operation, $domain, $force);
 
             $this->printFileGeneratedOutput($output);
         } catch (\Exception $exception) {

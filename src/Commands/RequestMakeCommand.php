@@ -33,7 +33,7 @@ class RequestMakeCommand extends BaseCommand
             $module = $this->argument('module');
             $force = $this->option('force');
 
-            $output = (new RequestGenerator())->generate($request, $module, $force);
+            $output = (new RequestGenerator)->generate($request, $module, $force);
 
             $this->printFileGeneratedOutput($output);
         } catch (\Exception $exception) {

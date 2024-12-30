@@ -2,6 +2,4 @@
 
 namespace Laranex\NextLaravel\Cores;
 
-class Job
-{
-}
+class Job {}
