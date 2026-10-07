@@ -11,9 +11,9 @@ class Str extends LaravelStr
      *
      * @param  string  $value
      */
-    public static function studly($value): string
+    public static function studly($value, bool $normalize = false): string
     {
-        return LaravelStr::studly($value);
+        return LaravelStr::studly($value, $normalize);
     }
 
     /**
