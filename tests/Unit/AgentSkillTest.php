@@ -5,7 +5,7 @@ declare(strict_types=1);
 it('ships the same agent skill to Laravel Boost and to npx skills', function (): void {
     $root = dirname(__DIR__, 2);
 
-    expect($root.'/skills/next-laravel-development/SKILL.md')->toBeFile()
-        ->and(file_get_contents($root.'/skills/next-laravel-development/SKILL.md'))
-        ->toBe(file_get_contents($root.'/resources/boost/skills/next-laravel-development/SKILL.md'));
+    expect($root.'/skills/next-laravel/SKILL.md')->toBeFile()
+        ->and(file_get_contents($root.'/skills/next-laravel/SKILL.md'))
+        ->toBe(file_get_contents($root.'/resources/boost/skills/next-laravel/SKILL.md'));
 });

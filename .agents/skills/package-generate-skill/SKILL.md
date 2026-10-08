@@ -17,8 +17,8 @@ Keep the package's bundled Boost skill accurate, concise, and focused on helping
 1. Inspect the package implementation before editing the Boost skill: service provider, facades, public classes, commands, config, routes, migrations, events, views, publish tags, and tests.
 2. Inspect package documentation: `README.md`, contributing docs, examples, and changelog entries that describe user-facing behavior.
 3. Identify the public integration surface only. Include install, configure, publish, command, route, facade, helper, middleware, event, and testing guidance only when the package actually exposes it.
-4. Update `resources/boost/skills/*/SKILL.md` with practical adoption steps, references, examples, and anti-patterns for Laravel app developers using the package.
-5. Preserve front matter, package metadata, and the Boost skill structure: description, primary goal, workflow, references, examples, and anti-patterns.
+4. Update `resources/boost/skills/next-laravel/SKILL.md` with practical usage steps and examples for Laravel app developers using the package, then copy it to `skills/next-laravel/SKILL.md` (the copy for `npx skills add laranex/next-laravel`); `tests/Unit/AgentSkillTest.php` asserts both files are identical.
+5. Preserve the front matter (`name: next-laravel`, description, license, metadata) and the usage-only structure: When to use, Install, Configure, Use, Test your app, Avoid.
 6. Validate that the Boost skill does not describe internals as public API and does not document features that are not implemented.
 
 ## Writing Rules
@@ -31,7 +31,8 @@ Keep the package's bundled Boost skill accurate, concise, and focused on helping
 
 ## References
 
-- `resources/boost/skills/`
+- `resources/boost/skills/next-laravel/SKILL.md`
+- `skills/next-laravel/SKILL.md`
 - `src/*ServiceProvider.php`
 - `src/Facades/`
 - `src/Console/Commands/`
