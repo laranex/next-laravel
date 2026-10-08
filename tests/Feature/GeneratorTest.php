@@ -13,7 +13,7 @@ beforeEach(function () {
     $this->directory = $this->cleanup(sys_get_temp_dir().'/next-laravel-'.uniqid());
 });
 
-it('replaces placeholders and normalises namespace separators', function () {
+it('replaces placeholders and normalizes namespace separators', function () {
     $content = (new ControllerGenerator)->replacePlaceholders('namespace {{namespace}}; class {{controller}} {}', [
         'namespace' => 'App/Modules/BlogModule/Http/Controllers',
         'controller' => 'PostController',

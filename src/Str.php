@@ -9,7 +9,7 @@ use Illuminate\Support\Str as LaravelStr;
 class Str extends LaravelStr
 {
     /**
-     * Convert a value to a pluralised kebab-case route name.
+     * Convert a value to a pluralized kebab-case route name.
      */
     public static function route(string $value): string
     {

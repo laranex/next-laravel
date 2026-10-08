@@ -9,7 +9,7 @@ metadata:
 
 # Next Laravel
 
-Use this skill when a Laravel application uses laranex/next-laravel to organise code into modules under `app/Modules`.
+Use this skill when a Laravel application uses laranex/next-laravel to organize code into modules under `app/Modules`.
 
 ## Primary Goal
 
@@ -24,7 +24,7 @@ Use this skill when a Laravel application uses laranex/next-laravel to organise 
 - `php artisan next:feature createPost blog` -> `Features/CreatePostFeature.php`
 - `php artisan next:operation slugifyTitle blog` -> `Operations/SlugifyTitleOperation.php`
 - `php artisan next:job sendEmail blog --queue` -> `Jobs/SendEmailJob.php` extending `QueueableJob`; omit `--queue` for a synchronous `Job`
-- names are normalised: `blog`, `Blog` and `BlogModule` all mean `BlogModule`; suffixes (`Feature`, `Controller`, ...) are added when missing
+- names are normalized: `blog`, `Blog` and `BlogModule` all mean `BlogModule`; suffixes (`Feature`, `Controller`, ...) are added when missing
 - the commands exit with `1` and print `... already exists!` when the file exists; pass `--force` to overwrite
 - names must not contain `/` or `\`; nested names such as `Blog/CreatePost` are rejected with exit code `1`
 
@@ -41,7 +41,7 @@ Use this skill when a Laravel application uses laranex/next-laravel to organise 
 - every PHP file under `routes/web` is loaded with the `web` middleware group and `NEXT_LARAVEL_WEB_ROUTES_PREFIX` (default none); files under `routes/api` get the `api` group and `NEXT_LARAVEL_API_ROUTES_PREFIX` (default `api`)
 - `NEXT_LARAVEL_ENABLE_ROUTES=false` turns discovery off; routes are not re-registered when the route cache is active
 
-### 4. Customise
+### 4. Customize
 
 - `php artisan vendor:publish --tag="next-laravel-config"` for `config/next-laravel.php`
 - `php artisan vendor:publish --tag="next-laravel-stubs"` to edit the generator stubs in `resources/stubs/vendor/next-laravel`; placeholders are `{{namespace}}` plus `{{controller}}`, `{{request}}`, `{{feature}}`, `{{operation}}`, `{{job}}`, `{{prefix}}` (route prefix such as `v1/posts`), plus `{{route}}` and `{{versionOrDirectory}}` kept for older route stubs
