@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laranex\NextLaravel\Generators;
 
 use Exception;
-use Illuminate\Support\Facades\File;
 use Laranex\NextLaravel\Str;
 
 class RequestGenerator extends Generator
 {
     /**
-     * Generate a job.
-     *
+     * Generate a request inside a module.
      *
      * @throws Exception
      */
@@ -20,14 +20,11 @@ class RequestGenerator extends Generator
         $module = Str::module($module);
 
         $directoryPath = app_path("Modules/{$module}/Http/Requests");
-        $filename = "{$request}.php";
-        $filePath = "{$directoryPath}/{$filename}";
+        $filePath = "$directoryPath/$request.php";
 
         $this->throwIfFileExists($filePath, $force);
 
-        $stubContents = $this->getStubContents();
-
-        $stubContents = $this->replacePlaceholders($stubContents, [
+        $stubContents = $this->replacePlaceholders($this->getStubContents(), [
             'namespace' => "App\\Modules\\{$module}\\Http\\Requests",
             'request' => $request,
         ]);
@@ -42,11 +39,6 @@ class RequestGenerator extends Generator
      */
     public function getStubContents(): string
     {
-        $stubFile = resource_path('stubs/vendor/next-laravel/request.php.stub');
-        if (! File::exists($stubFile)) {
-            $stubFile = __DIR__.'/../../resources/stubs/request.php.stub';
-        }
-
-        return File::get($stubFile);
+        return $this->stub('request.php.stub');
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laranex\NextLaravel\Generators;
 
 use Exception;
@@ -9,7 +11,9 @@ use Laranex\NextLaravel\Decorator;
 abstract class Generator
 {
     /**
-     * Replace placeholders in stubs
+     * Replace the {{placeholder}} tokens of a stub.
+     *
+     * @param  array<string, string>  $replacements
      */
     public function replacePlaceholders(string $content, array $replacements): string
     {
@@ -18,14 +22,14 @@ abstract class Generator
                 $replacement = str_replace('/', '\\', $replacement);
             }
 
-            $content = str_replace("{{{$placeholder}}}", $replacement, $content);
+            $content = str_replace('{{'.$placeholder.'}}', $replacement, $content);
         }
 
         return $content;
     }
 
     /**
-     * Throws exception if the given file exists and force options is false
+     * Throw when the given file exists and the force option is off.
      *
      * @throws Exception
      */
@@ -33,12 +37,13 @@ abstract class Generator
     {
         if (File::exists($filePath) && ! $force) {
             $path = Decorator::getRelativePath($filePath);
+
             throw new Exception("$path already exists!");
         }
     }
 
     /**
-     * Generate the replaced stub contents into a file
+     * Write the replaced stub contents to a file, creating the directory when needed.
      */
     public function generateFile(string $directoryPath, string $filePath, string $stubContents): void
     {
@@ -47,5 +52,19 @@ abstract class Generator
         }
 
         File::put($filePath, $stubContents);
+    }
+
+    /**
+     * Read a stub, preferring one published to resources/stubs/vendor/next-laravel.
+     */
+    protected function stub(string $name): string
+    {
+        $stubFile = resource_path("stubs/vendor/next-laravel/$name");
+
+        if (! File::exists($stubFile)) {
+            $stubFile = __DIR__."/../../resources/stubs/$name";
+        }
+
+        return File::get($stubFile);
     }
 }

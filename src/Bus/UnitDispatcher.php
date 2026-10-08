@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laranex\NextLaravel\Bus;
 
 use Error;
@@ -12,42 +14,37 @@ trait UnitDispatcher
     use Dispatcher, DispatchesJobs;
 
     /**
-     * Dispatch the given unit with the given arguments.
+     * Run the given unit (operation or job) synchronously with the given arguments.
      *
-     * @param  string  $unit
+     * @param  class-string|object  $unit
+     * @param  array<int|string, mixed>  $arguments
      */
-    public function run(mixed $unit, array $arguments = []): mixed
+    public function run(string|object $unit, array $arguments = []): mixed
     {
         return $this->dispatchSync($this->getDispatchableUnit($unit, $arguments));
     }
 
     /**
-     * Serve the given unit with arguments in given queue.
+     * Dispatch the given unit with the given arguments onto the given queue.
      *
-     * @param  string  $unit
+     * @param  class-string|object  $unit
+     * @param  array<int|string, mixed>  $arguments
      *
-     * @throws Error
+     * @throws Error when the unit cannot be queued
      */
-    public function runInQueue(mixed $unit, array $arguments = [], string $queue = 'default'): mixed
+    public function runInQueue(string|object $unit, array $arguments = [], string $queue = 'default'): mixed
     {
         $dispatchableUnit = $this->getDispatchableUnit($unit, $arguments);
 
-        try {
-            $dispatchableUnit->onQueue($queue);
-        } catch (Error $_) {
-
-            /**
-             * TODO remove the following condition once we provide QueueableOperation.
-             * We put this here, instead of the very first line of this method since we dont want to effect the application performance
-             * on normal queueable jobs by always checking a condition.
-             */
+        if (! method_exists($dispatchableUnit, 'onQueue')) {
             if ($dispatchableUnit instanceof Operation) {
-                $packageName = json_decode(file_get_contents(dirname(__DIR__, 2).'/composer.json', true))?->name;
-                throw new Error('['.$dispatchableUnit::class."is an Operation and is not allowed to be queued yet, $packageName will be providing it soon ]");
+                throw new Error('['.$dispatchableUnit::class.' is an Operation and is not allowed to be queued yet, laranex/next-laravel will be providing it soon]');
             }
 
-            throw new Error('['.$dispatchableUnit::class.' does not support queues. Please extends to ['.QueueableJob::class.']');
+            throw new Error('['.$dispatchableUnit::class.' does not support queues. Please extend ['.QueueableJob::class.']]');
         }
+
+        $dispatchableUnit->onQueue($queue);
 
         return $this->dispatch($dispatchableUnit);
     }

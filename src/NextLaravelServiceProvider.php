@@ -1,66 +1,108 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laranex\NextLaravel;
 
-use App;
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
+use Illuminate\Contracts\Foundation\CachesRoutes;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\ServiceProvider;
 use Laranex\NextLaravel\Commands\ControllerMakeCommand;
 use Laranex\NextLaravel\Commands\FeatureMakeCommand;
 use Laranex\NextLaravel\Commands\JobMakeCommand;
 use Laranex\NextLaravel\Commands\OperationMakeCommand;
 use Laranex\NextLaravel\Commands\RequestMakeCommand;
 use Laranex\NextLaravel\Commands\RouteMakeCommand;
-use Spatie\LaravelPackageTools\Package;
-use Spatie\LaravelPackageTools\PackageServiceProvider;
 
-class NextLaravelServiceProvider extends PackageServiceProvider
+class NextLaravelServiceProvider extends ServiceProvider
 {
-    public function configurePackage(Package $package): void
+    /**
+     * Register any application services.
+     */
+    public function register(): void
     {
-        $package
-            ->name('next-laravel')
-            ->hasConfigFile()
-            ->hasCommands([
-                RouteMakeCommand::class,
-                ControllerMakeCommand::class,
-                RequestMakeCommand::class,
-                FeatureMakeCommand::class,
-                OperationMakeCommand::class,
-                JobMakeCommand::class,
-            ])->hasViews('next-laravel');
-
-        $packageShortName = $package->shortName();
-        $this->publishes([
-            __DIR__.'/../resources/stubs' => resource_path("stubs/vendor/$packageShortName"),
-        ], "$packageShortName-stubs");
-
+        $this->mergeConfigFrom(__DIR__.'/../config/next-laravel.php', 'next-laravel');
     }
 
-    public function packageRegistered(): void
+    /**
+     * Bootstrap any application services.
+     */
+    public function boot(): void
     {
-        if (config('next-laravel.enable_routes') && ! App::routesAreCached()) {
+        $this->loadViewsFrom(__DIR__.'/../resources/views', 'next-laravel');
+
+        if ($this->shouldRegisterRoutes()) {
             $this->registerRoutes();
         }
+
+        if (! $this->app->runningInConsole()) {
+            return;
+        }
+
+        $this->commands([
+            RouteMakeCommand::class,
+            ControllerMakeCommand::class,
+            RequestMakeCommand::class,
+            FeatureMakeCommand::class,
+            OperationMakeCommand::class,
+            JobMakeCommand::class,
+        ]);
+
+        $this->publishes([
+            __DIR__.'/../config/next-laravel.php' => config_path('next-laravel.php'),
+        ], ['next-laravel', 'next-laravel-config']);
+
+        $this->publishes([
+            __DIR__.'/../resources/views' => resource_path('views/vendor/next-laravel'),
+        ], ['next-laravel', 'next-laravel-views']);
+
+        $this->publishes([
+            __DIR__.'/../resources/stubs' => resource_path('stubs/vendor/next-laravel'),
+        ], ['next-laravel', 'next-laravel-stubs']);
     }
 
+    /**
+     * Register every route file found under routes/web and routes/api.
+     */
     public function registerRoutes(): void
     {
-        $webRoutes = NextLaravel::getAllFilesOfADirectory(base_path('routes/web'), 'php');
-        $apiRoutes = NextLaravel::getAllFilesOfADirectory(base_path('routes/api'), 'php');
+        $webRoutes = NextLaravel::getAllFilesOfADirectory($this->app->basePath('routes/web'), 'php');
+        $apiRoutes = NextLaravel::getAllFilesOfADirectory($this->app->basePath('routes/api'), 'php');
 
-        $webRoutesPrefix = config('next-laravel.web_routes_prefix');
-        $apiRoutesPrefix = config('next-laravel.api_routes_prefix');
+        $webRoutesPrefix = $this->config('web_routes_prefix', '');
+        $apiRoutesPrefix = $this->config('api_routes_prefix', 'api');
 
         foreach ($webRoutes as $route) {
             Route::middleware('web')
-                ->prefix($webRoutesPrefix)
+                ->prefix(is_string($webRoutesPrefix) ? $webRoutesPrefix : '')
                 ->group($route);
         }
 
         foreach ($apiRoutes as $route) {
             Route::middleware('api')
-                ->prefix($apiRoutesPrefix)
+                ->prefix(is_string($apiRoutesPrefix) ? $apiRoutesPrefix : 'api')
                 ->group($route);
         }
+
+        Route::getRoutes()->refreshNameLookups();
+        Route::getRoutes()->refreshActionLookups();
+    }
+
+    /**
+     * Routes are only registered when enabled and not already cached.
+     */
+    protected function shouldRegisterRoutes(): bool
+    {
+        if (! $this->config('enable_routes', true)) {
+            return false;
+        }
+
+        return ! ($this->app instanceof CachesRoutes && $this->app->routesAreCached());
+    }
+
+    private function config(string $key, mixed $default = null): mixed
+    {
+        return $this->app->make(ConfigRepository::class)->get('next-laravel.'.$key, $default);
     }
 }

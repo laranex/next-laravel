@@ -6,5 +6,5 @@ use Laranex\NextLaravel\Cores\Controller;
 
 class {{controller}} extends Controller
 {
-
+    //
 }
