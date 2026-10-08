@@ -78,6 +78,13 @@ class CreatePostFeature extends Feature
 
 Every PHP file under `routes/web` is registered with the `web` middleware group and every file under `routes/api` with the `api` group and the `api` prefix. Set `NEXT_LARAVEL_ENABLE_ROUTES`, `NEXT_LARAVEL_WEB_ROUTES_PREFIX` or `NEXT_LARAVEL_API_ROUTES_PREFIX` to change that. See the [documentation](https://laranex.vercel.app/next-laravel) for more.
 
+## Built for humans and AI agents
+
+The documentation is written for developers, and the package ships an agent skill so AI coding agents use it the way it's meant to be used.
+
+- **Laravel Boost** installs the skill automatically: run `php artisan boost:install` (or `boost:update`).
+- **Any other agent** (Claude Code, Codex, Cursor and others): `npx skills add laranex/next-laravel`.
+
 ## Testing
 
 ```bash
