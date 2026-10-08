@@ -7,13 +7,11 @@ use Laranex\NextLaravel\Cores\Feature;
 
 class {{feature}} extends Feature
 {
-     /**
+    /**
      * Execute the feature.
-     *
-     * @return int
      */
-    public function handle(Request $request): int
+    public function handle(Request $request)
     {
-        return 0;
+        //
     }
 }

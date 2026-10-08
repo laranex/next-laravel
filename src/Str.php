@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laranex\NextLaravel;
 
 use Illuminate\Support\Str as LaravelStr;
@@ -7,17 +9,7 @@ use Illuminate\Support\Str as LaravelStr;
 class Str extends LaravelStr
 {
     /**
-     * Convert a value to studly caps case.
-     *
-     * @param  string  $value
-     */
-    public static function studly($value, bool $normalize = false): string
-    {
-        return LaravelStr::studly($value, $normalize);
-    }
-
-    /**
-     * Convert a value to pluralize kebab case.
+     * Convert a value to a pluralised kebab-case route name.
      */
     public static function route(string $value): string
     {
@@ -25,7 +17,7 @@ class Str extends LaravelStr
     }
 
     /**
-     * Convert a value to directory case
+     * Convert a value to a directory name.
      */
     public static function directory(string $value): string
     {
@@ -33,16 +25,18 @@ class Str extends LaravelStr
     }
 
     /**
-     * Determine the real name of the given name,
-     * excluding the given pattern.
-     *    i.e. the name: "CreateArticleFeature.php" with pattern '/Feature.php'
-     *        will result in "Create Article".
+     * Determine the real name of the given name, excluding the given pattern.
+     *
+     *    i.e. the name "CreateArticleFeature.php" with pattern '/Feature.php/'
+     *    will result in "Create Article".
      */
     public static function realName(string $name, string $pattern = '//'): string
     {
-        $name = preg_replace($pattern, '', $name);
+        $name = (string) preg_replace($pattern, '', $name);
 
-        return implode(' ', preg_split('/(?=[A-Z])/', $name, -1, PREG_SPLIT_NO_EMPTY));
+        $parts = preg_split('/(?=[A-Z])/', $name, -1, PREG_SPLIT_NO_EMPTY);
+
+        return implode(' ', $parts === false ? [] : $parts);
     }
 
     /**
@@ -54,10 +48,8 @@ class Str extends LaravelStr
      */
     public static function feature(string $name): string
     {
-        $parts = array_map(function ($part) {
-            return self::studly($part);
-        }, explode('/', $name));
-        $feature = self::studly(preg_replace('/Feature(\.php)?$/', '', array_pop($parts)).'Feature');
+        $parts = array_map(fn (string $part): string => self::studly($part), explode('/', $name));
+        $feature = self::studly(self::stripSuffix((string) array_pop($parts), 'Feature').'Feature');
 
         $parts[] = $feature;
 
@@ -67,33 +59,31 @@ class Str extends LaravelStr
     /**
      * Get the given name formatted as a job.
      *
-     *    i.e. "Create Post Feature", "CreatePostJob.php", "createPost",
-     *    and many other forms will be transformed to "CreatePostJob" which is
+     *    i.e. "Send Email Job", "SendEmailJob.php", "sendEmail"
+     *    and many other forms will be transformed to "SendEmailJob" which is
      *    the standard job class name.
-     *
-     * @param  string  $name
      */
-    public static function job($name): string
+    public static function job(string $name): string
     {
-        return self::studly(preg_replace('/Job(\.php)?$/', '', $name).'Job');
+        return self::studly(self::stripSuffix($name, 'Job').'Job');
     }
 
     /**
      * Get the given name formatted as an operation.
      *
-     *  i.e. "Create Post Operation", "CreatePostOperation.php", "createPost",
-     *  and many other forms will be transformed to "CreatePostOperation" which is
-     *  the standard operation class name.
-     *
-     * @param  string  $name
+     *    i.e. "Create Post Operation", "CreatePostOperation.php", "createPost"
+     *    and many other forms will be transformed to "CreatePostOperation" which is
+     *    the standard operation class name.
      */
-    public static function operation($name): string
+    public static function operation(string $name): string
     {
-        return self::studly(preg_replace('/Operation(\.php)?$/', '', $name).'Operation');
+        return self::studly(self::stripSuffix($name, 'Operation').'Operation');
     }
 
     /**
-     * Get the given name formatted as a service name.
+     * Get the given name formatted as a module name.
+     *
+     *    i.e. "blog", "Blog", "BlogModule" are all transformed to "BlogModule".
      */
     public static function module(string $name): string
     {
@@ -108,22 +98,18 @@ class Str extends LaravelStr
 
     /**
      * Get the given name formatted as a controller name.
-     *
-     * @param  string  $name
      */
-    public static function controller($name): string
+    public static function controller(string $name): string
     {
-        return self::studly(preg_replace('/Controller(\.php)?$/', '', $name).'Controller');
+        return self::studly(self::stripSuffix($name, 'Controller').'Controller');
     }
 
     /**
      * Get the given name formatted as a model.
      *
-     * Model names are just CamelCase
-     *
-     * @param  string  $name
+     * Model names are just StudlyCase.
      */
-    public static function model($name): string
+    public static function model(string $name): string
     {
         return self::studly($name);
     }
@@ -131,22 +117,28 @@ class Str extends LaravelStr
     /**
      * Get the given name formatted as a policy.
      */
-    public static function policy($name): string
+    public static function policy(string $name): string
     {
-        return self::studly(preg_replace('/Policy(\.php)?$/', '', $name).'Policy');
+        return self::studly(self::stripSuffix($name, 'Policy').'Policy');
     }
 
     /**
      * Get the given name formatted as a request.
      *
-     *  i.e. "StorePostRequest.php", "storePost",
-     *  and many other forms will be transformed to "StorePostRequest" which is
-     *  the standard operation class name.
-     *
-     * @param  string  $name
+     *    i.e. "StorePostRequest.php", "storePost"
+     *    and many other forms will be transformed to "StorePostRequest" which is
+     *    the standard request class name.
      */
-    public static function request($name): string
+    public static function request(string $name): string
     {
-        return self::studly(preg_replace('/Request(\.php)?$/', '', $name).'Request');
+        return self::studly(self::stripSuffix($name, 'Request').'Request');
+    }
+
+    /**
+     * Remove a trailing suffix (with an optional ".php") from the name.
+     */
+    private static function stripSuffix(string $name, string $suffix): string
+    {
+        return (string) preg_replace('/'.$suffix.'(\.php)?$/', '', $name);
     }
 }

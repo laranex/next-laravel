@@ -1,19 +1,32 @@
 <?php
 
+declare(strict_types=1);
+
 return [
 
-    /**
-     * Register routes under routes/web and routes/api by the service provider or not.
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Route Registration
+    |--------------------------------------------------------------------------
+    |
+    | When enabled, every PHP file under routes/web and routes/api is loaded
+    | by the service provider with the "web" and "api" middleware groups.
+    |
+    */
+
     'enable_routes' => env('NEXT_LARAVEL_ENABLE_ROUTES', true),
 
-    /**
-     * Prefix for web routes
-     */
+    /*
+    |--------------------------------------------------------------------------
+    | Route Prefixes
+    |--------------------------------------------------------------------------
+    |
+    | The URI prefixes applied to the route files under routes/web and
+    | routes/api respectively.
+    |
+    */
+
     'web_routes_prefix' => env('NEXT_LARAVEL_WEB_ROUTES_PREFIX', ''),
 
-    /**
-     * Prefix for api routes
-     */
     'api_routes_prefix' => env('NEXT_LARAVEL_API_ROUTES_PREFIX', 'api'),
 ];

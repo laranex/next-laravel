@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laranex\NextLaravel\Commands;
 
 use Laranex\NextLaravel\Generators\FeatureGenerator;
@@ -11,35 +13,27 @@ class FeatureMakeCommand extends BaseCommand
      *
      * @var string
      */
-    public $signature = 'next:feature
+    protected $signature = 'next:feature
                         {feature : Feature}
                         {module : Module}
                         {--F|force : Overwrite existing files}';
 
     /**
-     * The description the console command.
+     * The console command description.
      *
      * @var string
      */
-    public $description = 'Create a new feature in a module';
+    protected $description = 'Create a new feature in a module';
 
     /**
      * Execute the console command.
      */
     public function handle(): int
     {
-        try {
-            $feature = $this->argument('feature');
-            $module = $this->argument('module');
-            $force = $this->option('force');
-
-            $output = (new FeatureGenerator)->generate($feature, $module, $force);
-
-            $this->printFileGeneratedOutput($output);
-        } catch (\Exception $exception) {
-            $this->printFileGenerationErrorOutput($exception->getMessage());
-        }
-
-        return 0;
+        return $this->generate(fn (): string => (new FeatureGenerator)->generate(
+            $this->stringArgument('feature'),
+            $this->stringArgument('module'),
+            (bool) $this->option('force'),
+        ));
     }
 }

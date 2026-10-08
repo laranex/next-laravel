@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laranex\NextLaravel\Generators;
 
 use Exception;
-use Illuminate\Support\Facades\File;
 use Laranex\NextLaravel\Str;
 
 class ControllerGenerator extends Generator
 {
     /**
-     * Generate a controller.
-     *
+     * Generate a controller inside a module.
      *
      * @throws Exception
      */
@@ -20,14 +20,11 @@ class ControllerGenerator extends Generator
         $module = Str::module($module);
 
         $directoryPath = app_path("Modules/{$module}/Http/Controllers");
-        $filename = "$controller.php";
-        $filePath = "$directoryPath/$filename";
+        $filePath = "$directoryPath/$controller.php";
 
         $this->throwIfFileExists($filePath, $force);
 
-        $stubContents = $this->getStubContents();
-
-        $stubContents = $this->replacePlaceholders($stubContents, [
+        $stubContents = $this->replacePlaceholders($this->getStubContents(), [
             'namespace' => "App\\Modules\\{$module}\\Http\\Controllers",
             'controller' => $controller,
         ]);
@@ -42,11 +39,6 @@ class ControllerGenerator extends Generator
      */
     public function getStubContents(): string
     {
-        $stubFile = resource_path('stubs/vendor/next-laravel/controller.php.stub');
-        if (! File::exists($stubFile)) {
-            $stubFile = __DIR__.'/../../resources/stubs/controller.php.stub';
-        }
-
-        return File::get($stubFile);
+        return $this->stub('controller.php.stub');
     }
 }

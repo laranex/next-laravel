@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laranex\NextLaravel\Generators;
 
 use Exception;
-use Illuminate\Support\Facades\File;
 use Laranex\NextLaravel\Str;
 
 class FeatureGenerator extends Generator
 {
     /**
-     * Generate a feature.
-     *
+     * Generate a feature inside a module.
      *
      * @throws Exception
      */
@@ -20,15 +20,12 @@ class FeatureGenerator extends Generator
         $module = Str::module($module);
 
         $directoryPath = app_path("Modules/{$module}/Features");
-        $filename = "$feature.php";
-        $filePath = "$directoryPath/$filename";
+        $filePath = "$directoryPath/$feature.php";
 
         $this->throwIfFileExists($filePath, $force);
 
-        $stubContents = $this->getStubContents();
-
-        $stubContents = $this->replacePlaceholders($stubContents, [
-            'namespace' => "App\\Modules\\$module\\Features",
+        $stubContents = $this->replacePlaceholders($this->getStubContents(), [
+            'namespace' => "App\\Modules\\{$module}\\Features",
             'feature' => $feature,
         ]);
 
@@ -42,11 +39,6 @@ class FeatureGenerator extends Generator
      */
     public function getStubContents(): string
     {
-        $stubFile = resource_path('stubs/vendor/next-laravel/feature.php.stub');
-        if (! File::exists($stubFile)) {
-            $stubFile = __DIR__.'/../../resources/stubs/feature.php.stub';
-        }
-
-        return File::get($stubFile);
+        return $this->stub('feature.php.stub');
     }
 }

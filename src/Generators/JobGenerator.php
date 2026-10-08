@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Laranex\NextLaravel\Generators;
 
 use Exception;
-use Illuminate\Support\Facades\File;
 use Laranex\NextLaravel\Str;
 
 class JobGenerator extends Generator
 {
     /**
-     * Generate a job.
-     *
+     * Generate a job inside a module.
      *
      * @throws Exception
      */
@@ -20,14 +20,11 @@ class JobGenerator extends Generator
         $module = Str::module($module);
 
         $directoryPath = app_path("Modules/{$module}/Jobs");
-        $filename = "{$job}.php";
-        $filePath = "{$directoryPath}/{$filename}";
+        $filePath = "$directoryPath/$job.php";
 
         $this->throwIfFileExists($filePath, $force);
 
-        $stubContents = $this->getStubContents($queueable);
-
-        $stubContents = $this->replacePlaceholders($stubContents, [
+        $stubContents = $this->replacePlaceholders($this->getStubContents($queueable), [
             'namespace' => "App\\Modules\\{$module}\\Jobs",
             'job' => $job,
         ]);
@@ -40,15 +37,8 @@ class JobGenerator extends Generator
     /**
      * Get the appropriate stub contents.
      */
-    public function getStubContents(bool $queueable): string
+    public function getStubContents(bool $queueable = false): string
     {
-        $filePart = $queueable ? '.queueable' : '';
-
-        $stubFile = resource_path("stubs/vendor/next-laravel/job$filePart.php.stub");
-        if (! File::exists($stubFile)) {
-            $stubFile = __DIR__."/../../resources/stubs/job$filePart.php.stub";
-        }
-
-        return File::get($stubFile);
+        return $this->stub($queueable ? 'job.queueable.php.stub' : 'job.php.stub');
     }
 }
