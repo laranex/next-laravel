@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Laranex\NextLaravel\Commands;
 
+use Illuminate\Contracts\Config\Repository as ConfigRepository;
 use Laranex\NextLaravel\Generators\RouteGenerator;
 
 class RouteMakeCommand extends BaseCommand
@@ -29,16 +30,16 @@ class RouteMakeCommand extends BaseCommand
     /**
      * Execute the console command.
      */
-    public function handle(): int
+    public function handle(RouteGenerator $generator, ConfigRepository $config): int
     {
-        $exitCode = $this->generate(fn (): string => (new RouteGenerator)->generate(
+        $exitCode = $this->generate(fn (): string => $generator->generate(
             $this->stringArgument('route'),
             $this->stringArgument('versionOrDirectory'),
-            $this->option('api') ? 'api' : 'web',
+            (bool) $this->option('api') ? 'api' : 'web',
             (bool) $this->option('force'),
         ));
 
-        if (! config('next-laravel.enable_routes')) {
+        if (! (bool) $config->get('next-laravel.enable_routes', true)) {
             $this->printDisableRoutesWarning();
         }
 

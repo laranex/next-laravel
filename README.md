@@ -44,6 +44,8 @@ php artisan next:operation slugifyTitle blog
 php artisan next:job sendWelcomeEmail blog --queue
 ```
 
+Every command accepts `--force` to overwrite an existing file and exits with `1` when generation fails; names must not contain `/` or `\` (nested names are not supported).
+
 A controller serves a feature, and a feature runs operations and jobs:
 
 ```php

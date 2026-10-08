@@ -12,7 +12,7 @@ it('generates a feature inside the module', function () {
     expect(file_get_contents(app_path('Modules/CatalogModule/Features/ListProductsFeature.php')))
         ->toContain('namespace App\Modules\CatalogModule\Features;')
         ->toContain('class ListProductsFeature extends Feature')
-        ->toContain('public function handle(Request $request)');
+        ->toContain('public function handle(Request $request): mixed');
 });
 
 it('fails when the feature already exists', function () {

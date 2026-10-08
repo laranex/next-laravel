@@ -16,6 +16,9 @@ class FeatureGenerator extends Generator
      */
     public function generate(string $feature, string $module, bool $force = false): string
     {
+        $this->ensureNameIsNotNested($feature, 'feature');
+        $this->ensureNameIsNotNested($module, 'module');
+
         $feature = Str::feature($feature);
         $module = Str::module($module);
 

@@ -29,9 +29,9 @@ class JobMakeCommand extends BaseCommand
     /**
      * Execute the console command.
      */
-    public function handle(): int
+    public function handle(JobGenerator $generator): int
     {
-        return $this->generate(fn (): string => (new JobGenerator)->generate(
+        return $this->generate(fn (): string => $generator->generate(
             $this->stringArgument('job'),
             $this->stringArgument('module'),
             (bool) $this->option('queue'),

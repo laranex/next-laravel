@@ -28,9 +28,9 @@ class RequestMakeCommand extends BaseCommand
     /**
      * Execute the console command.
      */
-    public function handle(): int
+    public function handle(RequestGenerator $generator): int
     {
-        return $this->generate(fn (): string => (new RequestGenerator)->generate(
+        return $this->generate(fn (): string => $generator->generate(
             $this->stringArgument('request'),
             $this->stringArgument('module'),
             (bool) $this->option('force'),

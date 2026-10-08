@@ -46,5 +46,10 @@ it('reads the bundled stubs', function () {
         ->and((new RequestGenerator)->getStubContents())->toContain('extends Request')
         ->and((new JobGenerator)->getStubContents())->toContain('extends Job')
         ->and((new JobGenerator)->getStubContents(true))->toContain('extends QueueableJob')
-        ->and((new RouteGenerator)->getStubContents())->toContain("Route::prefix('{{versionOrDirectory}}/{{route}}')");
+        ->and((new RouteGenerator)->getStubContents())->toContain("Route::prefix('{{prefix}}')");
 });
+
+it('rejects names containing a path separator', function (string $name) {
+    expect(fn () => (new FeatureGenerator)->ensureNameIsNotNested($name, 'feature'))
+        ->toThrow(InvalidArgumentException::class, "The feature name [$name] must not contain \"/\" or \"\\\". Nested names are not supported.");
+})->with(['Blog/createPost', 'Blog\\CreatePost']);

@@ -28,9 +28,9 @@ class ControllerMakeCommand extends BaseCommand
     /**
      * Execute the console command.
      */
-    public function handle(): int
+    public function handle(ControllerGenerator $generator): int
     {
-        return $this->generate(fn (): string => (new ControllerGenerator)->generate(
+        return $this->generate(fn (): string => $generator->generate(
             $this->stringArgument('controller'),
             $this->stringArgument('module'),
             (bool) $this->option('force'),
