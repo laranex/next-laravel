@@ -12,23 +12,26 @@ beforeEach(function () {
     $this->writeFile($this->directory.'/a.php', '<?php');
     $this->writeFile($this->directory.'/notes.txt', 'text');
     $this->writeFile($this->directory.'/nested/deep/c.php', '<?php');
+
+    // The iterator joins the entries it finds with the native directory separator.
+    $this->path = fn (string ...$parts): string => implode(DIRECTORY_SEPARATOR, [$this->directory, ...$parts]);
 });
 
 it('lists every file of a directory recursively, sorted', function () {
     expect(NextLaravel::getAllFilesOfADirectory($this->directory))->toBe([
-        $this->directory.'/a.php',
-        $this->directory.'/b.php',
-        $this->directory.'/nested/deep/c.php',
-        $this->directory.'/notes.txt',
+        ($this->path)('a.php'),
+        ($this->path)('b.php'),
+        ($this->path)('nested', 'deep', 'c.php'),
+        ($this->path)('notes.txt'),
     ]);
 });
 
 it('filters the files by extension', function () {
     expect(NextLaravel::getAllFilesOfADirectory($this->directory, 'php'))->toBe([
-        $this->directory.'/a.php',
-        $this->directory.'/b.php',
-        $this->directory.'/nested/deep/c.php',
-    ])->and(NextLaravel::getAllFilesOfADirectory($this->directory, 'txt'))->toBe([$this->directory.'/notes.txt']);
+        ($this->path)('a.php'),
+        ($this->path)('b.php'),
+        ($this->path)('nested', 'deep', 'c.php'),
+    ])->and(NextLaravel::getAllFilesOfADirectory($this->directory, 'txt'))->toBe([($this->path)('notes.txt')]);
 });
 
 it('returns an empty list for a missing directory', function () {
@@ -36,6 +39,6 @@ it('returns an empty list for a missing directory', function () {
 });
 
 it('is reachable through the facade', function () {
-    expect(NextLaravelFacade::getAllFilesOfADirectory($this->directory, 'txt'))->toBe([$this->directory.'/notes.txt'])
+    expect(NextLaravelFacade::getAllFilesOfADirectory($this->directory, 'txt'))->toBe([($this->path)('notes.txt')])
         ->and(NextLaravelFacade::getFacadeRoot())->toBeInstanceOf(NextLaravel::class);
 });
