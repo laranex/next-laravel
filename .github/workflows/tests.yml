@@ -65,7 +65,10 @@ jobs:
         uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, fileinfo, sqlite, pdo_sqlite, bcmath, intl
+          # FFI is disabled so the type-coverage plugin analyses files in a single
+          # process: its forked workers share one cache file whose lock gives up
+          # after 100 ms, and concurrent writes then corrupt it (ParseError).
+          extensions: dom, curl, libxml, mbstring, zip, fileinfo, sqlite, pdo_sqlite, bcmath, intl, :ffi
           ini-values: error_reporting=E_ALL
           tools: composer:v2
           coverage: none
