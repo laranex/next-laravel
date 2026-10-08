@@ -32,13 +32,13 @@ jobs:
         stability: [prefer-lowest, prefer-stable]
         include:
           - laravel: 10.*
-            testbench: ^8.29
+            testbench: 8.*
           - laravel: 11.*
-            testbench: ^9.7
+            testbench: 9.*
           - laravel: 12.*
-            testbench: ^10.0
+            testbench: 10.*
           - laravel: 13.*
-            testbench: ^11.0
+            testbench: 11.*
         exclude:
           - laravel: 10.*
             php: 8.4
@@ -75,8 +75,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-          composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress --no-scripts
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+          composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress --no-scripts --with "orchestra/testbench:${{ matrix.testbench }}"
           composer run prepare
 
       - name: PHPStan
