@@ -15,7 +15,7 @@ class OperationMakeCommand extends BaseCommand
      */
     protected $signature = 'next:operation
                         {operation : Operation}
-                        {domain : Domain}
+                        {module : Module}
                         {--F|force : Overwrite existing files}';
 
     /**
@@ -23,16 +23,16 @@ class OperationMakeCommand extends BaseCommand
      *
      * @var string
      */
-    protected $description = 'Create a new operation in a domain';
+    protected $description = 'Create a new operation in a module';
 
     /**
      * Execute the console command.
      */
-    public function handle(): int
+    public function handle(OperationGenerator $generator): int
     {
-        return $this->generate(fn (): string => (new OperationGenerator)->generate(
+        return $this->generate(fn (): string => $generator->generate(
             $this->stringArgument('operation'),
-            $this->stringArgument('domain'),
+            $this->stringArgument('module'),
             (bool) $this->option('force'),
         ));
     }

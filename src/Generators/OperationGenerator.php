@@ -16,6 +16,9 @@ class OperationGenerator extends Generator
      */
     public function generate(string $operation, string $module, bool $force = false): string
     {
+        $this->ensureNameIsNotNested($operation, 'operation');
+        $this->ensureNameIsNotNested($module, 'module');
+
         $operation = Str::operation($operation);
         $module = Str::module($module);
 

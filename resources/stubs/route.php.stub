@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::prefix('{{versionOrDirectory}}/{{route}}')->group(function () {
+Route::prefix('{{prefix}}')->group(function () {
     Route::get('/', function () {
         return view('next-laravel::welcome');
     });

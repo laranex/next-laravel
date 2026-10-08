@@ -16,6 +16,9 @@ class RequestGenerator extends Generator
      */
     public function generate(string $request, string $module, bool $force = false): string
     {
+        $this->ensureNameIsNotNested($request, 'request');
+        $this->ensureNameIsNotNested($module, 'module');
+
         $request = Str::request($request);
         $module = Str::module($module);
 

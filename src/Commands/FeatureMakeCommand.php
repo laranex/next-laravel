@@ -28,9 +28,9 @@ class FeatureMakeCommand extends BaseCommand
     /**
      * Execute the console command.
      */
-    public function handle(): int
+    public function handle(FeatureGenerator $generator): int
     {
-        return $this->generate(fn (): string => (new FeatureGenerator)->generate(
+        return $this->generate(fn (): string => $generator->generate(
             $this->stringArgument('feature'),
             $this->stringArgument('module'),
             (bool) $this->option('force'),

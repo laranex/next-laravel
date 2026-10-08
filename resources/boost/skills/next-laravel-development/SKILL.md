@@ -22,10 +22,11 @@ Use this skill when a Laravel application uses laranex/next-laravel to organise 
 - `php artisan next:controller post blog` -> `app/Modules/BlogModule/Http/Controllers/PostController.php`
 - `php artisan next:request storePost blog` -> `Http/Requests/StorePostRequest.php`
 - `php artisan next:feature createPost blog` -> `Features/CreatePostFeature.php`
-- `php artisan next:operation slugifyTitle blog` -> `Operations/SlugifyTitleOperation.php` (the second argument is the module, called "domain" in the signature)
+- `php artisan next:operation slugifyTitle blog` -> `Operations/SlugifyTitleOperation.php`
 - `php artisan next:job sendEmail blog --queue` -> `Jobs/SendEmailJob.php` extending `QueueableJob`; omit `--queue` for a synchronous `Job`
 - names are normalised: `blog`, `Blog` and `BlogModule` all mean `BlogModule`; suffixes (`Feature`, `Controller`, ...) are added when missing
 - the commands exit with `1` and print `... already exists!` when the file exists; pass `--force` to overwrite
+- names must not contain `/` or `\`; nested names such as `Blog/CreatePost` are rejected with exit code `1`
 
 ### 2. Compose units
 
@@ -43,7 +44,7 @@ Use this skill when a Laravel application uses laranex/next-laravel to organise 
 ### 4. Customise
 
 - `php artisan vendor:publish --tag="next-laravel-config"` for `config/next-laravel.php`
-- `php artisan vendor:publish --tag="next-laravel-stubs"` to edit the generator stubs in `resources/stubs/vendor/next-laravel`; placeholders are `{{namespace}}` plus `{{controller}}`, `{{request}}`, `{{feature}}`, `{{operation}}`, `{{job}}`, `{{route}}`, `{{versionOrDirectory}}`
+- `php artisan vendor:publish --tag="next-laravel-stubs"` to edit the generator stubs in `resources/stubs/vendor/next-laravel`; placeholders are `{{namespace}}` plus `{{controller}}`, `{{request}}`, `{{feature}}`, `{{operation}}`, `{{job}}`, `{{prefix}}` (route prefix such as `v1/posts`), plus `{{route}}` and `{{versionOrDirectory}}` kept for older route stubs
 
 ## Rules, References, and Templates
 

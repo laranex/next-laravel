@@ -84,7 +84,7 @@ it('generates a web route file', function () {
         ->assertExitCode(0);
 
     expect(file_get_contents(base_path('routes/web/comments.php')))
-        ->toContain("Route::prefix('/comments')->group(function () {");
+        ->toContain("Route::prefix('comments')->group(function () {");
 });
 
 it('generates an api route file inside a version directory', function () {
@@ -95,7 +95,7 @@ it('generates an api route file inside a version directory', function () {
         ->assertExitCode(0);
 
     expect(file_get_contents(base_path('routes/api/v1/tags.php')))
-        ->toContain("Route::prefix('/v1/tags')->group(function () {");
+        ->toContain("Route::prefix('v1/tags')->group(function () {");
 });
 
 it('fails when the route file already exists and overwrites it with --force', function () {
@@ -109,7 +109,7 @@ it('fails when the route file already exists and overwrites it with --force', fu
 
     $this->artisan('next:route', ['route' => 'comments', '--force' => true])->assertExitCode(0);
 
-    expect(file_get_contents(base_path('routes/web/comments.php')))->toContain("Route::prefix('/comments')");
+    expect(file_get_contents(base_path('routes/web/comments.php')))->toContain("Route::prefix('comments')");
 });
 
 it('warns when route registration is disabled', function () {
@@ -123,9 +123,36 @@ it('warns when route registration is disabled', function () {
 it('prefers stubs published to resources/stubs/vendor/next-laravel', function () {
     $this->cleanup(resource_path('stubs/vendor/next-laravel'));
     $this->cleanup(base_path('routes/web/comments.php'));
-    $this->writeFile(resource_path('stubs/vendor/next-laravel/route.php.stub'), '<?php // custom {{route}} {{versionOrDirectory}}');
+    $this->writeFile(resource_path('stubs/vendor/next-laravel/route.php.stub'), '<?php // custom {{route}} {{versionOrDirectory}} {{prefix}}');
 
     $this->artisan('next:route', ['route' => 'comment'])->assertExitCode(0);
 
-    expect(file_get_contents(base_path('routes/web/comments.php')))->toBe('<?php // custom comments ');
+    expect(file_get_contents(base_path('routes/web/comments.php')))->toBe('<?php // custom comments  comments');
 });
+
+it('keeps filling the legacy versionOrDirectory placeholder of previously published stubs', function () {
+    $this->cleanup(resource_path('stubs/vendor/next-laravel'));
+    $this->cleanup(base_path('routes/api/v1'));
+    $this->writeFile(resource_path('stubs/vendor/next-laravel/route.php.stub'), "<?php // '{{versionOrDirectory}}/{{route}}'");
+
+    $this->artisan('next:route', ['route' => 'tag', 'versionOrDirectory' => 'v1', '--api' => true])->assertExitCode(0);
+
+    expect(file_get_contents(base_path('routes/api/v1/tags.php')))->toBe("<?php // '/v1/tags'");
+});
+
+it('treats a missing enable_routes key as enabled', function () {
+    $this->cleanup(base_path('routes/web/comments.php'));
+    config()->set('next-laravel', ['web_routes_prefix' => '', 'api_routes_prefix' => 'api']);
+
+    $this->artisan('next:route', ['route' => 'comment'])
+        ->doesntExpectOutputToContain('enable_routes has been disabled')
+        ->assertExitCode(0);
+});
+
+it('rejects a nested route name', function (string $route) {
+    $this->artisan('next:route', ['route' => $route])
+        ->expectsOutputToContain("The route name [$route] must not contain \"/\" or \"\\\". Nested names are not supported.")
+        ->assertExitCode(1);
+
+    expect(base_path('routes/web/admin/users.php'))->not->toBeFile();
+})->with(['admin/users', 'admin\\users']);

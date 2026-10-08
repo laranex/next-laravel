@@ -16,6 +16,9 @@ class ControllerGenerator extends Generator
      */
     public function generate(string $controller, string $module, bool $force = false): string
     {
+        $this->ensureNameIsNotNested($controller, 'controller');
+        $this->ensureNameIsNotNested($module, 'module');
+
         $controller = Str::controller($controller);
         $module = Str::module($module);
 

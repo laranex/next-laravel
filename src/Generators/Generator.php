@@ -6,6 +6,7 @@ namespace Laranex\NextLaravel\Generators;
 
 use Exception;
 use Illuminate\Support\Facades\File;
+use InvalidArgumentException;
 use Laranex\NextLaravel\Decorator;
 
 abstract class Generator
@@ -26,6 +27,18 @@ abstract class Generator
         }
 
         return $content;
+    }
+
+    /**
+     * Reject names containing "/" or "\"; nested names are not supported.
+     *
+     * @throws InvalidArgumentException
+     */
+    public function ensureNameIsNotNested(string $name, string $type): void
+    {
+        if (str_contains($name, '/') || str_contains($name, '\\')) {
+            throw new InvalidArgumentException(sprintf('The %s name [%s] must not contain "/" or "\\". Nested names are not supported.', $type, $name));
+        }
     }
 
     /**
