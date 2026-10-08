@@ -1,7 +1,7 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
     "name": "laranex/next-laravel",
-    "description": "Modular architecture for Laravel applications: modules with routes, controllers, requests, features, operations and jobs, plus Artisan generators for each",
+    "description": "Modular architecture for Laravel: self-contained modules with routes, controllers, requests, features, operations and jobs, with generators for each.",
     "keywords": [
         "laravel",
         "laranex",
