@@ -25,6 +25,8 @@ class Decorator
 
     public static function getRelativePath(string $path): string
     {
-        return ltrim(str_replace(base_path(), '', $path), '/\\');
+        $normalize = static fn (string $value): string => str_replace('\\', '/', $value);
+
+        return ltrim(str_replace($normalize(base_path()), '', $normalize($path)), '/');
     }
 }

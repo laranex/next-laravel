@@ -9,6 +9,9 @@ use Laranex\NextLaravel\Tests\TestCase;
 
 $packageRoot = dirname(__DIR__, 2);
 
+// The provider builds its publish paths from its own __DIR__, which uses the native directory separator.
+$sourceRoot = dirname((string) (new ReflectionClass(NextLaravelServiceProvider::class))->getFileName());
+
 it('lets the host application override the configuration', function () {
     TestCase::$config = ['next-laravel.api_routes_prefix' => 'v2'];
     $this->rebootApplication();
@@ -32,13 +35,13 @@ it('registers every generator command', function () {
     );
 });
 
-it('exposes publish tags for the config, views and stubs', function () use ($packageRoot) {
+it('exposes publish tags for the config, views and stubs', function () use ($packageRoot, $sourceRoot) {
     expect(ServiceProvider::pathsToPublish(NextLaravelServiceProvider::class, 'next-laravel-config'))
-        ->toBe([$packageRoot.'/src/../config/next-laravel.php' => config_path('next-laravel.php')])
+        ->toBe([$sourceRoot.'/../config/next-laravel.php' => config_path('next-laravel.php')])
         ->and(ServiceProvider::pathsToPublish(NextLaravelServiceProvider::class, 'next-laravel-views'))
-        ->toBe([$packageRoot.'/src/../resources/views' => resource_path('views/vendor/next-laravel')])
+        ->toBe([$sourceRoot.'/../resources/views' => resource_path('views/vendor/next-laravel')])
         ->and(ServiceProvider::pathsToPublish(NextLaravelServiceProvider::class, 'next-laravel-stubs'))
-        ->toBe([$packageRoot.'/src/../resources/stubs' => resource_path('stubs/vendor/next-laravel')])
+        ->toBe([$sourceRoot.'/../resources/stubs' => resource_path('stubs/vendor/next-laravel')])
         ->and(ServiceProvider::pathsToPublish(NextLaravelServiceProvider::class, 'next-laravel'))
         ->toHaveCount(3)
         ->and(glob($packageRoot.'/resources/stubs/*.stub'))->toHaveCount(7)
