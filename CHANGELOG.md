@@ -24,6 +24,7 @@ Versions 2.x and 3.x were never released; this release follows v1.1.0 directly s
 - The disabled-routes warning named the wrong config key (`next-myanmar.enable_routes`).
 - Generator names containing `/` or `\` (for example `next:feature Blog/createPost Blog`) produced a class named `Blog/CreatePostFeature`; every `next:*` command now rejects them with a clear error and exit code `1`.
 - Generated route files no longer start their prefix with a slash (`Route::prefix('v1/posts')` instead of `'/v1/posts'`). The route stub uses a new `{{prefix}}` placeholder; `{{route}}` and `{{versionOrDirectory}}` are still filled so previously published stubs keep working.
+- The feature stub's `handle()` declared a return type without returning anything, so a freshly generated feature threw a `TypeError` when served; it now returns `null` until you fill it in.
 
 ### Upgrading
 - Require PHP 8.1+ and Laravel 10+ then `composer require laranex/next-laravel:^4.0`.
@@ -34,10 +35,10 @@ Versions 2.x and 3.x were never released; this release follows v1.1.0 directly s
 - If you call `next:operation` with named arguments (`Artisan::call('next:operation', ['operation' => ..., 'domain' => ...])`), rename `domain` to `module`.
 - If you passed names with `/` or `\` to the generators, pass a flat name instead; nested names are not supported.
 
-## v1.1.0 - 2023
+## v1.1.0 - 2024-05-30
 
 - Support Laravel 10 and 11.
 
-## v1.0.0 - 2023
+## v1.0.0 - 2023-12-05
 
 - Initial release.
