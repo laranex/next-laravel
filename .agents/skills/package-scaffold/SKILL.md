@@ -14,11 +14,11 @@ Add package features in the right place and wire them through the service provid
 
 ## Workflow
 
-1. Inspect the existing package structure, sibling examples, README setup notes, and the current service provider before creating files.
-2. Identify whether the request touches commands, migrations, routes, config, views, translations, assets, middleware, tests, README/contributing docs, compatibility, or release flow.
+1. Inspect the existing package structure, sibling examples, and the current service provider before creating files.
+2. Identify whether the request touches commands, migrations, routes, config, views, translations, assets, middleware, tests, documentation, compatibility, or release flow.
 3. Create the capability files under Laravel-native package paths and use the configured package names, namespaces, publish tags, URLs, and badges consistently.
 4. Wire the capability through the service provider using the patterns in *Provider wiring* below.
-5. Use `package-testing` for coverage, update README or contributing documentation when user-facing behavior changes, use `package-compatibility` for matrix-sensitive changes, and use `package-release` for release tasks.
+5. Use `package-testing` for coverage, update the documentation at `https://laranex.vercel.app/next-laravel` and the bundled agent skill (`package-generate-skill`) when user-facing behavior changes, use `package-compatibility` for matrix-sensitive changes, and use `package-release` for release tasks.
 6. Add only the files needed for the requested capability and validate with the narrowest relevant command before broader checks.
 
 ## Provider Wiring
@@ -46,12 +46,12 @@ Provider wiring anti-patterns:
 - `lang/`
 - `database/migrations/`
 - `public/`
-- `src/Console/Commands/`
+- `src/Commands/`
 - `tests/Feature/` and `tests/Unit/`
 
 ## Examples
 
-- Add an Artisan command: create the command class under `src/Console/Commands`, register it in the `commands` array inside the `runningInConsole()` guard, add a feature test for observable console output, and document the command if it is user-facing.
+- Add an Artisan command: create the command class under `src/Commands`, register it in the `commands` array inside the `runningInConsole()` guard, add a feature test for observable console output, and document the command if it is user-facing.
 - Add a publishable migration: place the migration in `database/migrations`, wire it through a console-guarded `publishesMigrations` call with a `next-laravel-migrations` tag, and test publish behavior with Testbench.
 - Wire a new publish tag by adding a `publishes` map inside the existing console-guarded publishing method and naming the tag with `next-laravel-*`.
 
