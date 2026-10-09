@@ -13,5 +13,7 @@ class {{feature}} extends Feature
     public function handle(Request $request): mixed
     {
         //
+
+        return null;
     }
 }
