@@ -9,6 +9,7 @@ Versions 2.x and 3.x were never released; this release follows v1.1.0 directly s
 ### Changed
 - Requires PHP 8.1+ and supports Laravel 10 through 13.
 - Rebuilt on the official Laravel package skeleton (Pest, PHPStan, Pint, Testbench workbench, GitHub Actions matrix).
+- The package requires `laravel/framework` (`^10.0||^11.0||^12.0||^13.0`) instead of individual `illuminate/*` components, because it uses classes that ship only with the framework (`Illuminate\Foundation\Bus\DispatchesJobs`, `Http\FormRequest`, `Validation\ValidatesRequests`, `Inspiring`).
 - `spatie/laravel-package-tools` was dropped; `NextLaravelServiceProvider` is a plain `Illuminate\Support\ServiceProvider`. Route files are now registered during `boot()` instead of `register()`.
 - The generator commands (`next:route`, `next:controller`, `next:request`, `next:feature`, `next:operation`, `next:job`) exit with code `1` when generation fails (for example when the file already exists and `--force` was not given); they previously exited with `0`.
 - `Str::studly()` is no longer overridden; the unused `$normalize` argument was removed. The Laravel method is inherited unchanged.
