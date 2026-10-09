@@ -24,13 +24,7 @@
     ],
     "require": {
         "php": "^8.1",
-        "illuminate/bus": "^10.0||^11.0||^12.0||^13.0",
-        "illuminate/console": "^10.0||^11.0||^12.0||^13.0",
-        "illuminate/contracts": "^10.0||^11.0||^12.0||^13.0",
-        "illuminate/filesystem": "^10.0||^11.0||^12.0||^13.0",
-        "illuminate/queue": "^10.0||^11.0||^12.0||^13.0",
-        "illuminate/routing": "^10.0||^11.0||^12.0||^13.0",
-        "illuminate/support": "^10.0||^11.0||^12.0||^13.0"
+        "laravel/framework": "^10.0||^11.0||^12.0||^13.0"
     },
     "require-dev": {
         "larastan/larastan": "^2.11||^3.9",
