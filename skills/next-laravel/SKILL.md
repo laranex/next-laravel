@@ -23,7 +23,7 @@ Requires PHP 8.1+ and Laravel 10 to 13. The service provider and the `NextLarave
 
 ## Configure
 
-- Every PHP file under `routes/web` is loaded with the `web` middleware group, every file under `routes/api` with the `api` group. Routes are not registered again while the route cache is active.
+- Every PHP file under `routes/web` is loaded with the `web` middleware group, every file under `routes/api` with the `api` group. Until routes are cached the folders are scanned on every request, so run `php artisan route:cache` in production; cached routes are not scanned or registered again.
 - `NEXT_LARAVEL_ENABLE_ROUTES` (default `true`): set to `false` to turn discovery off.
 - `NEXT_LARAVEL_WEB_ROUTES_PREFIX` (default empty) and `NEXT_LARAVEL_API_ROUTES_PREFIX` (default `api`): URI prefixes for the two folders.
 - Publish only what you change: `php artisan vendor:publish --tag="next-laravel-config"`, `--tag="next-laravel-stubs"` (edit the generator stubs in `resources/stubs/vendor/next-laravel`) or `--tag="next-laravel-views"`.

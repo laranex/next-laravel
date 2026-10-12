@@ -12,6 +12,10 @@ return [
     | When enabled, every PHP file under routes/web and routes/api is loaded
     | by the service provider with the "web" and "api" middleware groups.
     |
+    | Until the routes are cached the directories are scanned on every
+    | request, so run "php artisan route:cache" when you deploy to
+    | production; cached routes are never scanned or registered again.
+    |
     */
 
     'enable_routes' => env('NEXT_LARAVEL_ENABLE_ROUTES', true),

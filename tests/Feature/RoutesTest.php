@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use Illuminate\Foundation\Support\Providers\RouteServiceProvider;
 use Illuminate\Support\Facades\Route;
 use Laranex\NextLaravel\NextLaravelServiceProvider;
 use Laranex\NextLaravel\Tests\Concerns\TouchesSharedSkeleton;
@@ -69,8 +70,24 @@ it('can register the route files on demand', function () {
     expect($provider)->toBeInstanceOf(NextLaravelServiceProvider::class);
     $provider->registerRoutes();
 
-    expect(Route::has('fixtures.on-demand'))->toBeTrue();
+    // Fluent route names are indexed by Laravel's RouteServiceProvider once the application has booted.
+    expect(Route::has('fixtures.on-demand'))->toBeFalse();
+
+    $this->app->register(RouteServiceProvider::class, true);
+
+    expect(Route::has('fixtures.on-demand'))->toBeTrue()
+        ->and(route('fixtures.on-demand'))->toBe(url('on-demand'));
+
     $this->get('/on-demand')->assertOk()->assertSee('ok');
+});
+
+it('resolves the named routes of the registered route files with route()', function () {
+    TestCase::$enableRoutes = true;
+    TestCase::$withRouteFixtures = true;
+    $this->rebootApplication();
+
+    expect(route('fixtures.web.posts'))->toBe(url('posts'))
+        ->and(route('fixtures.api.posts'))->toBe(url('api/posts'));
 });
 
 it('generates a web route file', function () {

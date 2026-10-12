@@ -84,9 +84,6 @@ class NextLaravelServiceProvider extends ServiceProvider
                 ->prefix(is_string($apiRoutesPrefix) ? $apiRoutesPrefix : 'api')
                 ->group($route);
         }
-
-        Route::getRoutes()->refreshNameLookups();
-        Route::getRoutes()->refreshActionLookups();
     }
 
     /**
