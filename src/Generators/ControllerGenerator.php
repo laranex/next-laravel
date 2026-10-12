@@ -19,8 +19,8 @@ class ControllerGenerator extends Generator
         $this->ensureNameIsNotNested($controller, 'controller');
         $this->ensureNameIsNotNested($module, 'module');
 
-        $controller = Str::controller($controller);
-        $module = Str::module($module);
+        $controller = $this->validIdentifier(Str::controller($controller), $controller, 'controller');
+        $module = $this->validIdentifier(Str::module($module), $module, 'module');
 
         $directoryPath = app_path("Modules/{$module}/Http/Controllers");
         $filePath = "$directoryPath/$controller.php";

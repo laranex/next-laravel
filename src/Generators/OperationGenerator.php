@@ -19,8 +19,8 @@ class OperationGenerator extends Generator
         $this->ensureNameIsNotNested($operation, 'operation');
         $this->ensureNameIsNotNested($module, 'module');
 
-        $operation = Str::operation($operation);
-        $module = Str::module($module);
+        $operation = $this->validIdentifier(Str::operation($operation), $operation, 'operation');
+        $module = $this->validIdentifier(Str::module($module), $module, 'module');
 
         $directoryPath = app_path("Modules/{$module}/Operations");
         $filePath = "$directoryPath/$operation.php";

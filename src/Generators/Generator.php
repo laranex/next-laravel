@@ -42,6 +42,20 @@ abstract class Generator
     }
 
     /**
+     * Return the generated class or module name, rejecting it when it is not a valid PHP identifier.
+     *
+     * @throws InvalidArgumentException
+     */
+    public function validIdentifier(string $identifier, string $name, string $type): string
+    {
+        if (preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $identifier) !== 1) {
+            throw new InvalidArgumentException(sprintf('The %s name [%s] is invalid: [%s] is not a valid PHP identifier. Use only letters, numbers and underscores, starting with a letter or an underscore.', $type, $name, $identifier));
+        }
+
+        return $identifier;
+    }
+
+    /**
      * Throw when the given file exists and the force option is off.
      *
      * @throws Exception

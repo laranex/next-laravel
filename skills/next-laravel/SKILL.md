@@ -32,7 +32,7 @@ Requires PHP 8.1+ and Laravel 10 to 13. The service provider and the `NextLarave
 
 ### Generate units
 
-Every command accepts `--force` to overwrite an existing file and exits `1` (printing `... already exists!`) when the file exists. Module names are normalized: `blog`, `Blog` and `BlogModule` all mean `BlogModule`, and missing suffixes are added. Names must not contain `/` or `\`.
+Every command accepts `--force` to overwrite an existing file and exits `1` (printing `... already exists!`) when the file exists. Module names are normalized: `blog`, `Blog` and `BlogModule` all mean `BlogModule`, and missing suffixes are added. Names must not contain `/` or `\` and must produce a valid PHP identifier (letters, numbers and underscores, not starting with a number); route names may only produce lowercase letters, numbers, `-` and `_`, and the route's `versionOrDirectory` takes `/`-separated segments of the same characters (no `..`).
 
 - `php artisan next:controller post blog` → `app/Modules/BlogModule/Http/Controllers/PostController.php`
 - `php artisan next:request storePost blog` → `app/Modules/BlogModule/Http/Requests/StorePostRequest.php`

@@ -156,3 +156,11 @@ it('rejects a nested route name', function (string $route) {
 
     expect(base_path('routes/web/admin/users.php'))->not->toBeFile();
 })->with(['admin/users', 'admin\\users']);
+
+it('accepts nested route directories made of plain segments', function () {
+    $this->cleanup(base_path('routes/api/admin'));
+
+    $this->artisan('next:route', ['route' => 'user', 'versionOrDirectory' => '/Admin/v1_beta-2/', '--api' => true])->assertExitCode(0);
+
+    expect(file_get_contents(base_path('routes/api/admin/v1_beta-2/users.php')))->toContain("Route::prefix('admin/v1_beta-2/users')");
+});

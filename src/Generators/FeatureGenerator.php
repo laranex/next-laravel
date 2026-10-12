@@ -19,8 +19,8 @@ class FeatureGenerator extends Generator
         $this->ensureNameIsNotNested($feature, 'feature');
         $this->ensureNameIsNotNested($module, 'module');
 
-        $feature = Str::feature($feature);
-        $module = Str::module($module);
+        $feature = $this->validIdentifier(Str::feature($feature), $feature, 'feature');
+        $module = $this->validIdentifier(Str::module($module), $module, 'module');
 
         $directoryPath = app_path("Modules/{$module}/Features");
         $filePath = "$directoryPath/$feature.php";
