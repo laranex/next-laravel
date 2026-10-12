@@ -19,7 +19,7 @@ Use this skill when a Laravel application uses `laranex/next-laravel` to organiz
 composer require laranex/next-laravel
 ```
 
-Requires PHP 8.1+ and Laravel 10 to 13. The service provider and the `NextLaravel` facade are auto-discovered.
+Requires PHP 8.1+ and Laravel 10 (10.48.29 or later) to 13. The service provider and the `NextLaravel` facade are auto-discovered.
 
 ## Configure
 

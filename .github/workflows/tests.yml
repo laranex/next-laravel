@@ -30,12 +30,16 @@ jobs:
         include:
           - laravel: 10.*
             testbench: 8.*
+            framework: '^10.48.29'
           - laravel: 11.*
             testbench: 9.*
+            framework: '11.*'
           - laravel: 12.*
             testbench: 10.*
+            framework: '12.*'
           - laravel: 13.*
             testbench: 11.*
+            framework: '13.*'
         exclude:
           - laravel: 10.*
             php: 8.4
@@ -72,7 +76,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update
+          composer require "laravel/framework:${{ matrix.framework }}" --no-interaction --no-update
           composer update --${{ matrix.stability }} --prefer-dist --no-interaction --no-progress --no-scripts --with "orchestra/testbench:${{ matrix.testbench }}"
           composer run prepare
 
