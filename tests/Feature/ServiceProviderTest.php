@@ -21,7 +21,7 @@ it('lets the host application override the configuration', function () {
 });
 
 it('registers the package views', function () {
-    expect(view('next-laravel::welcome')->render())->toContain('<title>Next Laravel</title>');
+    expect(view('next-laravel::welcome')->render())->toContain('<title>Next Laravel</title>')->not->toContain('fonts.googleapis.com');
 });
 
 it('registers every generator command', function () {

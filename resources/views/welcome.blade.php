@@ -3,8 +3,6 @@
 <head>
     <title>Next Laravel</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Lato:100" rel="stylesheet" type="text/css">
-
     <style>
         html, body {
             height: 100%;
@@ -17,7 +15,7 @@
             width: 100%;
             display: table;
             font-weight: 100;
-            font-family: 'Lato', 'Helvetica', serif;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
 
         .container {

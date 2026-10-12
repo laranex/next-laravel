@@ -101,7 +101,23 @@ it('generates a web route file', function () {
         ->assertExitCode(0);
 
     expect(file_get_contents(base_path('routes/web/comments.php')))
-        ->toContain("Route::prefix('comments')->group(function () {");
+        ->toContain("Route::prefix('comments')->group(function () {")
+        ->toContain("// Route::get('/', [YourController::class, 'index'])->name('comments.index');")
+        ->not->toContain('view(');
+});
+
+it('generates a route file that Laravel can load without registering a public route', function () {
+    $this->cleanup(base_path('routes/web/galleries.php'));
+
+    $this->artisan('next:route', ['route' => 'gallery'])->assertExitCode(0);
+
+    $routes = count(Route::getRoutes()->getRoutes());
+
+    Route::middleware('web')->group(base_path('routes/web/galleries.php'));
+
+    expect(Route::getRoutes()->getRoutes())->toHaveCount($routes);
+
+    $this->get('/galleries')->assertNotFound();
 });
 
 it('generates an api route file inside a version directory', function () {
