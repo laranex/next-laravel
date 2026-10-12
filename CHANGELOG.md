@@ -25,6 +25,7 @@ Versions 2.x and 3.x were never released; this release follows v1.1.0 directly s
 - The disabled-routes warning named the wrong config key (`next-myanmar.enable_routes`).
 - Generator names containing `/` or `\` (for example `next:feature Blog/createPost Blog`) produced a class named `Blog/CreatePostFeature`; every `next:*` command now rejects them with a clear error and exit code `1`.
 - Generated route files no longer start their prefix with a slash (`Route::prefix('v1/posts')` instead of `'/v1/posts'`). The route stub uses a new `{{prefix}}` placeholder; `{{route}}` and `{{versionOrDirectory}}` are still filled so previously published stubs keep working.
+- Generator names must now produce a valid PHP identifier, and route names and `versionOrDirectory` segments may only use lowercase letters, numbers, `-` and `_` (so no `..`), so a name can no longer inject code into a stub or write outside its directory. Generated route files ship an empty route group instead of a public route rendering the welcome view, which no longer loads Google Fonts, and `serve()`, `run()` and `runInQueue()` only instantiate class names that extend `Feature`, `Operation` or `Job`.
 - The feature stub's `handle()` declared a return type without returning anything, so a freshly generated feature threw a `TypeError` when served; it now returns `null` until you fill it in.
 
 ### Upgrading
