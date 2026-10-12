@@ -44,7 +44,7 @@ Every command accepts `--force` to overwrite an existing file and exits `1` (pri
 ### Compose units
 
 - Controllers extend `Laranex\NextLaravel\Cores\Controller` and call `$this->serve(CreatePostFeature::class, ['title' => $value])`. The array is passed to the feature's constructor as named arguments; `handle()` receives container-resolved dependencies such as `Illuminate\Http\Request`.
-- Features and operations extend `Cores\Feature` / `Cores\Operation` and call `$this->run(Unit::class, [...])` to run an operation or job synchronously (an instance works too) and `$this->runInQueue(Job::class, [...], 'queue-name')` for a `QueueableJob`.
+- Features and operations extend `Cores\Feature` / `Cores\Operation` and call `$this->run(Unit::class, [...])` to run an operation or job synchronously (an instance works too) and `$this->runInQueue(Job::class, [...], 'queue-name')` for a `QueueableJob`. A class name must extend `Cores\Feature`, `Cores\Operation` or `Cores\Job`; any other class throws an `InvalidArgumentException` instead of being instantiated.
 - Form requests extend `Cores\Request` (a `FormRequest`).
 
 ```php

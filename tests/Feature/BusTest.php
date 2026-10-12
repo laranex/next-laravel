@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Bus;
 use Laranex\NextLaravel\Cores\Controller;
 use Laranex\NextLaravel\Cores\Feature;
+use Laranex\NextLaravel\Cores\Job;
 use Laranex\NextLaravel\Cores\Operation;
 use Laranex\NextLaravel\Cores\QueueableJob;
 use Laranex\NextLaravel\Cores\Request;
@@ -60,6 +61,25 @@ it('resolves dispatchable units from class names or instances', function () {
 
     expect($feature->getDispatchableUnit($instance, []))->toBe($instance)
         ->and($feature->getDispatchableUnit(RecordPostJob::class, ['slug' => 'named']))->toEqual(new RecordPostJob('named'));
+});
+
+it('refuses to instantiate class names that are not units', function (string $class) {
+    expect(fn () => (new CreatePostFeature('x'))->getDispatchableUnit($class, []))
+        ->toThrow(InvalidArgumentException::class, "[$class] cannot be dispatched: pass a class that extends [".Feature::class.'], ['.Operation::class.'] or ['.Job::class.'].');
+})->with([
+    'an unrelated class' => [SplFileObject::class],
+    'a controller' => [PostController::class],
+    'a base class itself' => [Feature::class],
+    'a missing class' => ['App\\Missing\\Unit'],
+]);
+
+it('refuses to serve or run class names that are not units', function () {
+    expect(fn () => (new PostController)->serve(SplFileObject::class, ['filename' => __FILE__]))
+        ->toThrow(InvalidArgumentException::class, 'cannot be dispatched')
+        ->and(fn () => (new CreatePostFeature('x'))->run(SplFileObject::class, ['filename' => __FILE__]))
+        ->toThrow(InvalidArgumentException::class, 'cannot be dispatched')
+        ->and(fn () => (new CreatePostFeature('x'))->runInQueue(SplFileObject::class, ['filename' => __FILE__]))
+        ->toThrow(InvalidArgumentException::class, 'cannot be dispatched');
 });
 
 it('ships base classes for every unit type', function () {
